@@ -17,6 +17,7 @@ public class Message {
 	
 	}
 	
+	//convenience constructor
 	public Message(long id, String message, String author) {
 		this.id = id;
 		this.message = message;

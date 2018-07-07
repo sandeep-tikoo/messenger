@@ -23,7 +23,7 @@ public class MyResource {
         return "<html>\r\n" + 
         		"<body>\r\n" + 
         		"    <h2>Jersey RESTful Web Application Response</h2>\r\n" + 
-        		"    <p><a href=\"webapi/myresource\">Call again - Jersey resource</a>\r\n" + 
+        		"    <p><a href=\"http://localhost:8080/messenger/\">Back to Home</a>\r\n" + 
         		"    <p>Visit <a href=\"http://jersey.java.net\">Project Jersey website</a>\r\n" + 
         		"    for more information on Jersey!\r\n" + 
         		"</body>\r\n" + 
