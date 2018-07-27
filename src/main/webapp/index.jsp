@@ -3,7 +3,7 @@
     <h2>Jersey RESTful Web Application! Home Page</h2>
     <hr>
     
-    <p>Course Progress -> <a href="https://www.youtube.com/watch?v=Mqpgca6654Q&list=PLqq-6Pq4lTTZh5U8RbdXq0WaYvZBz2rbn&index=23"> REST Web Services 23 - The Param Annotations</a>
+    <p>Course Progress -> <a href="https://www.youtube.com/watch?v=HEabElNrfbo&index=26&list=PLqq-6Pq4lTTZh5U8RbdXq0WaYvZBz2rbn"> REST Web Services 26 - Sending Status Codes and Location Headers</a>
 
     <h3>Simple Rest Call - Example</h3>
     <p><a href="webapi/myresource">Jersey resource</a>
@@ -35,6 +35,8 @@
     <p>16. Completed Completed Profile Resource, Profile Object, Profile Service class, having crud implementations on profile and Profile Resource Class </p>
     <p>17. Completed Pagination, Quary-param annotation and how to extract it and use it</p>
     <p>18. Learn't we can't use multiple GET methods in resource handling class, but will have to call multiple get implementations from the same main GET method based on the values of Query parms</p>
+    <p>19. Learnt how to create sub resource</p>
+    <p>20. Completed sub resource Comments</p>
     <hr>
     
     <p>Visit <a href="http://jersey.java.net">Project Jersey website</a>
