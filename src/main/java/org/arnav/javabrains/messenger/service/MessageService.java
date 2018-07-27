@@ -3,20 +3,23 @@ package org.arnav.javabrains.messenger.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.*;
 
 import org.arnav.javabrains.messenger.database.DatabaseClass;
 import org.arnav.javabrains.messenger.model.Message;
 
 public class MessageService {
 
-	
+		
 		private Map<Long, Message> messages = DatabaseClass.getMessages();
 	
 		public MessageService() {
-			messages.put(1L, new Message(1, "Hello World!", "Arnav"));
-			messages.put(2L, new Message(2, "Hello Jersey!", "Arnav"));
-			messages.put(3L, new Message(3, "Hello Arnav!", "Deepu"));
-			messages.put(4L, new Message(4, "Hello Arnav and Deepu!", "Sonu"));
+			if (messages.size() < 1) {
+				messages.put(1L, new Message(1, "Hello World!", "Arnav"));
+				messages.put(2L, new Message(2, "Hello Jersey!", "Arnav"));
+				messages.put(3L, new Message(3, "Hello Arnav!", "Deepu"));
+				messages.put(4L, new Message(4, "Hello Arnav and Deepu!", "Sonu"));
+			}
 		}
 		
 		// GET Message Collection or List
@@ -30,6 +33,33 @@ public class MessageService {
 //			return list;
 		}
 		
+		//Get for year, Query parm = year
+		public List<Message> getAllMessagesForYear(int year)	{
+			List<Message> messagesForYear = new ArrayList<>();
+			Calendar cal = Calendar.getInstance();
+			
+			//Learn below for loop syntax seperately
+			for (Message message : messages.values())	{
+				cal.setTime(message.getCreated());
+				if (cal.get(Calendar.YEAR)== year)	{
+					messagesForYear.add(message);
+				}
+			}
+			return messagesForYear;
+		}
+		
+		// GET Message Collection paginated
+		public List<Message> getAllMessagesPaginated(int start, int size)	{
+			ArrayList <Message> list = new ArrayList<Message>(messages.values());
+			
+			if (start + size > list.size())	{ 
+				return new ArrayList<Message>();
+			}
+			
+			return list.subList(start, start + size);
+
+		}
+		
 		// GET Message based on ID
 		public Message getMessage(long id)	{
 			return messages.get(id);
@@ -38,8 +68,10 @@ public class MessageService {
 		// POST Add new Message
 		public Message addMessage(Message message)	{
 			message.setId(messages.size() + 1);
-			messages.put(message.getId(), message);
-			return message;
+			messages.put(message.getId(), new Message(message.getId(), message.getAuthor(), message.getMessage()));
+			return messages.get(message.getId());
+			//Below failed effort to return resource locator URI
+//			URI uri = uriInfo.getAbsolutePathBuilder().path(message.getId().toString()).build();
 		}
 		
 		// PUT Update Message
@@ -48,6 +80,7 @@ public class MessageService {
 				return null;
 			}
 			messages.put(message.getId(), message);
+			
 			return message;
 		}
 		
@@ -55,6 +88,5 @@ public class MessageService {
 		public Message removeMessage(long id)	{
 			return messages.remove(id);
 		}
-
 
 }

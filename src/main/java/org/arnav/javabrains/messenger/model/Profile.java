@@ -23,7 +23,7 @@ public class Profile {
 			this.profileName = profileName;
 			this.firstName = firstName;
 			this.lastName = lastName;
-			this.created = created;
+			this.created = new Date();;
 		}
 		
 		
