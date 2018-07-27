@@ -72,6 +72,7 @@ public class MessageService {
 			return messages.get(message.getId());
 			//Below failed effort to return resource locator URI
 //			URI uri = uriInfo.getAbsolutePathBuilder().path(message.getId().toString()).build();
+			//but his can be retrieved using @context annotation and pulling from HttpHeaders
 		}
 		
 		// PUT Update Message

@@ -1,28 +1,20 @@
 package org.arnav.javabrains.messenger.model;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+public class Comment {
 
-@XmlRootElement
-public class Message {
 	
 	private long id;
 	private String message;
 	private Date created;
 	private String author;
-	private Map<Long, Comment> comments = new HashMap<>();
-
-	//Always have this no-op constructor, for some reason unknown right now to me
-	public Message() {
 	
+	public Comment()	{
+		
 	}
 	
-	//convenience constructor
-	public Message(long id, String message, String author) {
+	public Comment(long id, String message, String author) {
 		this.id = id;
 		this.message = message;
 		this.created = new Date();
@@ -53,15 +45,5 @@ public class Message {
 	public void setAuthor(String author) {
 		this.author = author;
 	}
-	
-	//A way to ignore pulling this field when message object is created or accessed
-	
-	@XmlTransient
-	public Map<Long, Comment> getComments() {
-		return comments;
-	}
 
-	public void setComments(Map<Long, Comment> comments) {
-		this.comments = comments;
-	}
 }
