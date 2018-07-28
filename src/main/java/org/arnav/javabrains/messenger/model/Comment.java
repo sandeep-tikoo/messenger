@@ -2,6 +2,9 @@ package org.arnav.javabrains.messenger.model;
 
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Comment {
 
 	
@@ -10,6 +13,7 @@ public class Comment {
 	private Date created;
 	private String author;
 	
+	//no arg constructor for seliazation/deserialization
 	public Comment()	{
 		
 	}

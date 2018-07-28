@@ -10,7 +10,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.arnav.javabrains.messenger.model.Comment;
 import org.arnav.javabrains.messenger.service.CommentService;
@@ -35,8 +37,9 @@ public class CommentResource {
 	@GET
 	@Path("/{commentId}")
 	public Comment getComment(@PathParam("messageId") long messageId, 
-							  @PathParam("commentId") long commentId) {
-		return commentService.getComment(messageId, commentId);
+							  @PathParam("commentId") long commentId,
+							  @Context UriInfo uriInfo) {
+		return commentService.getComment(messageId, commentId, uriInfo.getAbsolutePath().toString());
 	}
 	
 	@PUT

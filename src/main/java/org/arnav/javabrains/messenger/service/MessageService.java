@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.*;
 
 import org.arnav.javabrains.messenger.database.DatabaseClass;
+import org.arnav.javabrains.messenger.exception.DataNotFoundException;
 import org.arnav.javabrains.messenger.model.Message;
 
 public class MessageService {
@@ -62,7 +63,12 @@ public class MessageService {
 		
 		// GET Message based on ID
 		public Message getMessage(long id)	{
-			return messages.get(id);
+//			return messages.get(id);
+			Message message = messages.get(id);
+			if (message == null)	{
+				throw new DataNotFoundException("Message with id " + id + " was not found");
+			}
+			return message;
 		}
 		
 		// POST Add new Message

@@ -1,5 +1,6 @@
 package org.arnav.javabrains.messenger.resources;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.ws.rs.BeanParam;
@@ -14,16 +15,19 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 //import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.arnav.javabrains.messenger.model.Message;
+import org.arnav.javabrains.messenger.model.Profile;
 import org.arnav.javabrains.messenger.resources.beans.MessageFilterBean;
 import org.arnav.javabrains.messenger.service.MessageService;
 //We can specify produces and Consumes at Class level or method level, the difference is Obvious :)
 
 @Path("/messages")
 @Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+//@Produces(MediaType.APPLICATION_JSON)
+@Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML}) 
 
 public class MessageResource {
 
@@ -55,14 +59,52 @@ public class MessageResource {
 	
 	@GET
 	@Path("/{messageId}")
-	public Message getMessage(@PathParam("messageId") long Id) {
+	public Message getMessage(@PathParam("messageId") long Id,
+							  @Context UriInfo uriInfo) {
 //		return "Got Path Parm " + messageId;
-		return messageService.getMessage(Id);
+		Message message =  messageService.getMessage(Id);
+		
+		//HATEOAS happening below
+		message.addLink(uriInfo.getAbsolutePath().toString(), "self");
+//		We can also can do it like below, this will wrongly add 2 self url's 
+//		but for the understanding sake let it be
+		String uriS = uriInfo.getBaseUriBuilder()  		//get base uri like http://localhost:8080/messenger/webapi/
+				.path(MessageResource.class) 			//get messages resource /messages
+				.path(Long.toString(message.getId()))	//get message id
+				.build()								//build url
+				.toString();							//convert to string
+		message.addLink(uriS, "self");
+		
+		String uriC = uriInfo.getBaseUriBuilder()
+				.path(MessageResource.class)
+				.path(MessageResource.class,"getCommentResource")
+				.path(CommentResource.class)
+				.resolveTemplate("messageId", message.getId())
+//				.path("comments")
+				.build()
+				.toString();
+		message.addLink(uriC, "comments");
+		
+		String uriP = uriInfo.getBaseUriBuilder()
+				.path(ProfileResource.class)
+				.path(message.getAuthor())
+				.build()
+				.toString();
+		message.addLink(uriP, "profile");
+		
+		return message;
 	}
 	
+	//Sending Location headers and custom status codes
 	@POST
-	public Message addMessage(Message message)	{
-		return messageService.addMessage(message);
+	public Response addMessage(Message message, @Context UriInfo uriInfo)	{
+		Message newMessage = messageService.addMessage(message);
+		String newId = String.valueOf(newMessage.getId());
+		URI uri = uriInfo.getAbsolutePathBuilder().path(newId).build();
+		return Response.created(uri)
+				.entity(newMessage)
+				.build();
+				
 //		Modified below to return the link to the resourse just created (Coded by Deepu)
 //		return "/messages/" + message.getId();
 	}
@@ -82,7 +124,7 @@ public class MessageResource {
 	}
 	
 	@Path("/{messageId}/comments")
-	public CommentResource Test(@Context UriInfo uriInfo)	{
+	public CommentResource getCommentResource(@Context UriInfo uriInfo)	{
 //		String str = uriInfo.getPath().toString();
 //		return "Test - in '" + str + "' sub resource";
 		return new CommentResource();
